@@ -15,8 +15,8 @@ services:
       - DB_NAME=controle_financeiro
     ports:
       - "5000:5000"
-    volumes:
-      - ./api:/app
+    # volumes:
+    #   - ./api:/app   # comente por enquanto
 
   db:
     image: mysql:8.0
