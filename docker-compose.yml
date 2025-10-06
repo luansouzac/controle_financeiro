@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api
+    container_name: api_controle_financeiro
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db_controle_financeiro
+      - DB_PORT=3307
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=controle_financeiro
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api:/app   # comente por enquanto
+
+  db:
+    image: mysql:8.0
+    container_name: db_controle_financeiro
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: controle_financeiro
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  db_data:
