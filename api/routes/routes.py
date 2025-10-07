@@ -15,6 +15,14 @@ def create_user():
     from flask import request
     user_data = request.get_json()
     return user_ctrl.create_user(user_data)
+@routes_bp.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    from flask import request
+    user_data = request.get_json()
+    return user_ctrl.update_user(user_id, user_data)
+@routes_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    return user_ctrl.delete_user(user_id)
 
 
 
