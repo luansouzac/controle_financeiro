@@ -1,12 +1,21 @@
 from flask import Blueprint
-from controllers.user_controller import get_users
+import controllers.user_controller as user_ctrl
 
 routes_bp = Blueprint('routes_bp', __name__)
 
 
 @routes_bp.route('/users', methods=['GET'])
 def users():
-    return get_users()
+    return user_ctrl.get_users()
+@routes_bp.route('/users/<int:user_id>', methods=['GET'])
+def user_detail(user_id):
+    return user_ctrl.get_user_by_id(user_id)
+@routes_bp.route('/users', methods=['POST'])
+def create_user():
+    from flask import request
+    user_data = request.get_json()
+    return user_ctrl.create_user(user_data)
+
 
 
 # @routes_bp.route('/posts', methods=['GET'])
