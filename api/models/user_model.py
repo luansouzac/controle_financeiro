@@ -21,3 +21,28 @@ class Users(db.Model):
             "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
             if self.criado_em else None
         }
+    
+    @classmethod
+    def get_all_users(cls): #cls é chamar a propria classe dentro do metodo
+        return cls.query.all()
+
+    @classmethod
+    def get_by_id(cls, user_id):
+        return cls.query.get(user_id)
+
+    @classmethod
+    def create(cls, user_data):
+        user = cls(**user_data)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    def update(self, user_data):
+        for key, value in user_data.items():
+            setattr(self, key, value)
+        db.session.commit()
+        return self
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
