@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import request
 from controllers.user_controller import UserController
 from controllers.carteira_controller import CarteiraController
+from controllers.saldo_controller import SaldoController
 
 routes_bp = Blueprint('routes_bp', __name__)
 
@@ -42,6 +43,24 @@ def update_carteira(carteira_id):
 @routes_bp.route('/carteiras/<int:carteira_id>', methods=['DELETE'])
 def delete_carteira(carteira_id):
     return CarteiraController.delete_carteira(carteira_id)
+
+@routes_bp.route('/saldos', methods=['GET'])
+def saldos():
+    return SaldoController.get_saldos()
+@routes_bp.route('/saldos/<int:saldo_id>', methods=['GET'])
+def saldo_detail(saldo_id):
+    return SaldoController.get_saldo_by_id(saldo_id)
+@routes_bp.route('/saldos', methods=['POST'])
+def create_saldo():
+    saldo_data = request.get_json()
+    return SaldoController.create_saldo(saldo_data)
+@routes_bp.route('/saldos/<int:saldo_id>', methods=['PUT'])
+def update_saldo(saldo_id):
+    saldo_data = request.get_json()
+    return SaldoController.update_saldo(saldo_id, saldo_data)
+@routes_bp.route('/saldos/<int:saldo_id>', methods=['DELETE'])
+def delete_saldo(saldo_id):
+    return SaldoController.delete_saldo(saldo_id)
 
 
 

@@ -36,13 +36,13 @@ class Users(db.Model):
         db.session.add(user)
         db.session.commit()
         return user
-
+    @classmethod
     def update(self, user_data):
         for key, value in user_data.items():
             setattr(self, key, value)
         db.session.commit()
         return self
-
+    @classmethod
     def delete(self):
         db.session.delete(self)
         db.session.commit()
