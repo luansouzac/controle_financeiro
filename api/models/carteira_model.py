@@ -19,3 +19,35 @@ class Carteiras(db.Model):
             "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
             if self.criado_em else None
         }
+    @classmethod
+    def get_all_carteiras(cls):
+        return cls.query.all()
+    @classmethod
+    def get_by_id(cls, carteira_id):
+        return cls.query.get(carteira_id)
+
+    @classmethod
+    def create(cls, carteira_data):
+        carteira = cls(**carteira_data)
+        db.session.add(carteira)
+        db.session.commit()
+        return carteira
+    
+    @classmethod
+    def update(cls, carteira_id, carteira_data):
+        carteira = cls.get_by_id(carteira_id)
+        if not carteira:
+            return None
+        for key, value in carteira_data.items():
+            setattr(carteira, key, value)
+        db.session.commit()
+        return carteira
+    
+    @classmethod
+    def delete(cls, carteira_id):
+        carteira = cls.get_by_id(carteira_id)
+        if not carteira:
+            return None
+        db.session.delete(carteira)
+        db.session.commit()
+        return carteira
