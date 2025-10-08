@@ -2,7 +2,6 @@ from flask import jsonify
 from models.user_model import Users
 
 class UserController:
-
     @staticmethod
     def get_users():
         users_list = Users.get_all_users()

@@ -3,6 +3,8 @@ from flask import request
 from controllers.user_controller import UserController
 from controllers.carteira_controller import CarteiraController
 from controllers.saldo_controller import SaldoController
+from controllers.categoria_transacao_controller import CategoriaTransacaoController
+
 
 routes_bp = Blueprint('routes_bp', __name__)
 
@@ -62,6 +64,23 @@ def update_saldo(saldo_id):
 def delete_saldo(saldo_id):
     return SaldoController.delete_saldo(saldo_id)
 
+@routes_bp.route('/categorias_transacao', methods=['GET'])
+def categorias():
+    return CategoriaTransacaoController.get_categorias()
+@routes_bp.route('/categorias_transacao/<int:categoria_id>', methods=['GET'])
+def categoria_detail(categoria_id):
+    return CategoriaTransacaoController.get_categoria_by_id(categoria_id)
+@routes_bp.route('/categorias_transacao', methods=['POST'])
+def create_categoria():
+    categoria_data = request.get_json()
+    return CategoriaTransacaoController.create_categoria(categoria_data)
+@routes_bp.route('/categorias_transacao/<int:categoria_id>', methods=['PUT'])
+def update_categoria(categoria_id):
+    categoria_data = request.get_json()
+    return CategoriaTransacaoController.update_categoria(categoria_id, categoria_data)
+@routes_bp.route('/categorias_transacao/<int:categoria_id>', methods=['DELETE'])
+def delete_categoria(categoria_id):
+    return CategoriaTransacaoController.delete_categoria(categoria_id)
 
 
 
