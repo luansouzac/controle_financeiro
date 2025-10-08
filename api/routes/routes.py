@@ -4,6 +4,7 @@ from controllers.user_controller import UserController
 from controllers.carteira_controller import CarteiraController
 from controllers.saldo_controller import SaldoController
 from controllers.categoria_transacao_controller import CategoriaTransacaoController
+from controllers.transacao_controller import TransacaoController
 
 
 routes_bp = Blueprint('routes_bp', __name__)
@@ -81,6 +82,24 @@ def update_categoria(categoria_id):
 @routes_bp.route('/categorias_transacao/<int:categoria_id>', methods=['DELETE'])
 def delete_categoria(categoria_id):
     return CategoriaTransacaoController.delete_categoria(categoria_id)
+
+@routes_bp.route('/transacoes', methods=['GET'])
+def transacoes():
+    return TransacaoController.get_transacoes()
+@routes_bp.route('/transacoes/<int:transacao_id>', methods=['GET'])
+def transacao_detail(transacao_id):
+    return TransacaoController.get_transacao_by_id(transacao_id)
+@routes_bp.route('/transacoes', methods=['POST'])
+def create_transacao():
+    new_transacao = request.get_json()
+    return TransacaoController.create_transacao(new_transacao)
+@routes_bp.route('/transacoes/<int:transacao_id>', methods=['PUT'])
+def update_transacao(transacao_id):
+    transacao_data = request.get_json()
+    return TransacaoController.update_transacao(transacao_id, transacao_data)
+@routes_bp.route('/transacoes/<int:transacao_id>', methods=['DELETE'])
+def delete_transacao(transacao_id):
+    return TransacaoController.delete_transacao(transacao_id)
 
 
 
