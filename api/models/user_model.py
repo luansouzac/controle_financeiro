@@ -53,6 +53,10 @@ class User(db.Model):
         return user
 
     def update(self, user_data):
+        if 'senha' in user_data: #troca a senha no update
+            self.set_password(user_data['senha'])
+            del user_data['senha']
+
         for key, value in user_data.items():
             setattr(self, key, value)
         db.session.commit()
