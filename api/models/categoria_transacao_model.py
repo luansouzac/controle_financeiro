@@ -11,7 +11,6 @@ class CategoriaTransacao(db.Model):
 
     transacoes = db.relationship('Transacao', back_populates='categoria', cascade="all, delete-orphan")
 
-
     def to_dict(self):
         return {
             "id": self.id,
@@ -33,7 +32,6 @@ class CategoriaTransacao(db.Model):
         db.session.add(categoria)
         db.session.commit()
         return categoria
-    @classmethod
     def update(cls, categoria_id, categoria_data):
         categoria = cls.get_by_id(categoria_id)
         if not categoria:
@@ -42,7 +40,6 @@ class CategoriaTransacao(db.Model):
             setattr(categoria, key, value)
         db.session.commit()
         return categoria
-    @classmethod
     def delete(cls, categoria_id):
         categoria = cls.get_by_id(categoria_id)
         if not categoria:

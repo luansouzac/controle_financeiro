@@ -39,7 +39,6 @@ class Transacao(db.Model):
         db.session.add(transacao)
         db.session.commit()
         return transacao
-    @classmethod
     def update(cls, transacao_id, transacao_data):
         transacao = cls.get_by_id(transacao_id)
         if not transacao:
@@ -48,7 +47,6 @@ class Transacao(db.Model):
             setattr(transacao, key, value)
         db.session.commit()
         return transacao
-    @classmethod
     def delete(cls, transacao_id):
         transacao = cls.get_by_id(transacao_id)
         if not transacao:
