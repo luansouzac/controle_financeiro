@@ -1,7 +1,7 @@
 from models import db
 from datetime import datetime
 
-class Carteiras(db.Model):
+class Carteira(db.Model):
     __tablename__ = 'carteiras'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -9,6 +9,8 @@ class Carteiras(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.Text, nullable=True)
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+
+    usuario = db.relationship('User', back_populates='carteiras')
 
     def to_dict(self):
         return {
@@ -33,7 +35,6 @@ class Carteiras(db.Model):
         db.session.commit()
         return carteira
     
-    @classmethod
     def update(cls, carteira_id, carteira_data):
         carteira = cls.get_by_id(carteira_id)
         if not carteira:
@@ -43,7 +44,6 @@ class Carteiras(db.Model):
         db.session.commit()
         return carteira
     
-    @classmethod
     def delete(cls, carteira_id):
         carteira = cls.get_by_id(carteira_id)
         if not carteira:

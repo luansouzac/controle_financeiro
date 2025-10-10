@@ -2,7 +2,7 @@ from models import db
 from datetime import datetime
 
 
-class Users(db.Model):
+class User(db.Model):
     __tablename__ = 'usuarios'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -12,6 +12,7 @@ class Users(db.Model):
     senha = db.Column(db.String(255), nullable=False)
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
 
+    carteiras = db.relationship('Carteira', back_populates='usuario', cascade="all, delete-orphan")
     def to_dict(self):
         return {
             "id": self.id,
@@ -36,13 +37,11 @@ class Users(db.Model):
         db.session.add(user)
         db.session.commit()
         return user
-    @classmethod
     def update(self, user_data):
         for key, value in user_data.items():
             setattr(self, key, value)
         db.session.commit()
         return self
-    @classmethod
     def delete(self):
         db.session.delete(self)
         db.session.commit()

@@ -1,36 +1,36 @@
 from flask import jsonify
-from models.carteira_model import Carteiras
+from models.carteira_model import Carteira
 
 
 class CarteiraController:
     @staticmethod 
     def get_carteiras():
-        carteiras_list = Carteiras.get_all_carteiras()
+        carteiras_list = Carteira.get_all_carteiras()
         return jsonify([c.to_dict() for c in carteiras_list])
 
     @staticmethod 
     def get_carteira_by_id(carteira_id):
-        carteira = Carteiras.get_by_id(carteira_id)
+        carteira = Carteira.get_by_id(carteira_id)
         if carteira:
             return jsonify(carteira.to_dict())
         return jsonify({"error": "Carteira não encontrada"}), 404
     @staticmethod 
     def create_carteira(carteira_data):
-        new_carteira = Carteiras.create(carteira_data)
+        new_carteira = Carteira.create(carteira_data)
         return jsonify(new_carteira.to_dict()), 201
     @staticmethod 
     def update_carteira(carteira_id, carteira_data):
-        carteira = Carteiras.get_by_id(carteira_id)
+        carteira = Carteira.get_by_id(carteira_id)
         if not carteira:
             return jsonify({"error": "Carteira não encontrada"}), 404
         
-        updated_carteira = Carteiras.update(carteira_id, carteira_data)
+        updated_carteira = Carteira.update(carteira_id, carteira_data)
         return jsonify(updated_carteira.to_dict())
     @staticmethod 
     def delete_carteira(carteira_id):
-        carteira = Carteiras.get_by_id(carteira_id)
+        carteira = Carteira.get_by_id(carteira_id)
         if not carteira:
             return jsonify({"error": "Carteira não encontrada"}), 404
         
-        Carteiras.delete(carteira_id)
+        Carteira.delete(carteira_id)
         return jsonify({"message": "Carteira deletada com sucesso"}), 200
