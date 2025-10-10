@@ -12,6 +12,8 @@ class Carteira(db.Model):
 
     usuario = db.relationship('User', back_populates='carteiras')
     saldo = db.relationship('Saldo', back_populates='carteira', uselist=False, cascade="all, delete-orphan")
+    transacoes = db.relationship('Transacao', back_populates='carteira', cascade="all, delete-orphan", lazy='dynamic')
+
 
     def to_dict(self):
         return {

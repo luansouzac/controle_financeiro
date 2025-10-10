@@ -1,6 +1,6 @@
 from models import db
 from datetime import datetime
-
+import bcrypt
 
 class User(db.Model):
     __tablename__ = 'usuarios'
@@ -23,6 +23,16 @@ class User(db.Model):
             if self.criado_em else None
         }
     
+    def set_password(self, password):
+        password_bytes = password.encode('utf-8')
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password_bytes, salt)
+        self.senha = hashed_password.decode('utf-8')
+    def check_password(self, password):
+        password_bytes = password.encode('utf-8')
+        stored_password_bytes = self.senha.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, stored_password_bytes)
+
     @classmethod
     def get_all_users(cls): #cls é chamar a propria classe dentro do metodo
         return cls.query.all()
@@ -33,10 +43,15 @@ class User(db.Model):
 
     @classmethod
     def create(cls, user_data):
+        password = user_data.pop('senha', None) #separando a senha do dicionario e transformando em hash
         user = cls(**user_data)
+    
+        if password:
+            user.set_password(password)
         db.session.add(user)
         db.session.commit()
         return user
+
     def update(self, user_data):
         for key, value in user_data.items():
             setattr(self, key, value)

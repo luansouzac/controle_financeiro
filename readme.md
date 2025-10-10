@@ -51,3 +51,7 @@ pip install <nova_biblioteca>
 pip freeze > requirements.txt
 docker-compose up --build
 ````
+
+##Entrando no ambiente virtual python
+
+.\.venv\Scripts\activate
