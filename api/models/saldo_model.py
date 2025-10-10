@@ -10,6 +10,7 @@ class Saldo(db.Model):
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
     ult_atualizacao = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    carteira = db.relationship('Carteira', back_populates='saldo')
     def to_dict(self):
         return {
             "id": self.id,
@@ -32,7 +33,6 @@ class Saldo(db.Model):
         db.session.add(saldo)
         db.session.commit()
         return saldo
-    @classmethod
     def update(cls, saldo_id, saldo_data):
         saldo = cls.get_by_id(saldo_id)
         if not saldo:
@@ -41,7 +41,6 @@ class Saldo(db.Model):
             setattr(saldo, key, value)
         db.session.commit()
         return saldo
-    @classmethod
     def delete(cls, saldo_id):
         saldo = cls.get_by_id(saldo_id)
         if not saldo:

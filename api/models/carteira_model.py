@@ -11,6 +11,7 @@ class Carteira(db.Model):
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
 
     usuario = db.relationship('User', back_populates='carteiras')
+    saldo = db.relationship('Saldo', back_populates='carteira', uselist=False, cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
