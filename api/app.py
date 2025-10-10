@@ -2,6 +2,7 @@ from flask import Flask
 from routes.routes import routes_bp
 from dotenv import load_dotenv
 from models import db
+from flask_jwt_extended import JWTManager
 import os
 
 load_dotenv()
@@ -11,9 +12,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = "123456789"  # Chave secreta demais
 
 db.init_app(app)
-
+jwt = JWTManager(app)
 app.register_blueprint(routes_bp)
 
 
