@@ -9,6 +9,9 @@ class CategoriaTransacao(db.Model):
     descricao = db.Column(db.String(255), nullable=True)
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
 
+    transacoes = db.relationship('Transacao', back_populates='categoria', cascade="all, delete-orphan")
+
+
     def to_dict(self):
         return {
             "id": self.id,
