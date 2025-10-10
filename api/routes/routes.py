@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask import request
+from controllers.auth_controller import AuthController
 from controllers.user_controller import UserController
 from controllers.carteira_controller import CarteiraController
 from controllers.saldo_controller import SaldoController
@@ -9,6 +10,14 @@ from controllers.transacao_controller import TransacaoController
 
 routes_bp = Blueprint('routes_bp', __name__)
 
+
+@routes_bp.route('/register', methods=['POST'])
+def register():
+    return AuthController.register()
+
+@routes_bp.route('/login', methods=['POST'])
+def login():
+    return AuthController.login()
 
 @routes_bp.route('/users', methods=['GET'])
 def users():
