@@ -25,6 +25,7 @@ class TransacaoController:
         return jsonify([t.to_dict() for t in transacoes])
     
     @staticmethod
+    @jwt_required()
     def get_transacao_by_id(transacao_id):
         transacao = Transacao.get_by_id(transacao_id)
         if transacao:
