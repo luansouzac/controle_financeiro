@@ -19,23 +19,17 @@ def register():
 def login():
     return AuthController.login()
 
-@routes_bp.route('/users', methods=['GET'])
-def users():
-    return UserController.get_users()
-@routes_bp.route('/users/<int:user_id>', methods=['GET'])
-def user_detail(user_id):
-    return UserController.get_user_by_id(user_id)
-@routes_bp.route('/users', methods=['POST'])
-def create_user():
-    user_data = request.get_json()
-    return UserController.create_user(user_data)
-@routes_bp.route('/users/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
-    user_data = request.get_json()
-    return UserController.update_user(user_id, user_data)
-@routes_bp.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    return UserController.delete_user(user_id)
+@routes_bp.route('/user', methods=['GET'])
+def get_me():
+    return UserController.get_me()
+
+@routes_bp.route('/user', methods=['PUT'])
+def update_me():
+    return UserController.update_me()
+
+@routes_bp.route('/user', methods=['DELETE'])
+def delete_me():
+    return UserController.delete_me()
 
 
 @routes_bp.route('/carteiras', methods=['GET'])
