@@ -63,15 +63,16 @@ class TransacaoController:
             else:
                 saldo.valor -= valor
 
-            nova_transacao = Transacao(
-                id_carteira=id_carteira,
-                id_categoria=data.get('id_categoria'),
-                tipo=tipo,
-                valor=valor,
-                descricao=data.get('descricao')
-            )
+            dados_da_transacao = {
+                "id_carteira": id_carteira,
+                "id_categoria": data.get('id_categoria'),
+                "tipo": data.get('tipo'),
+                "valor": valor,
+                "descricao": data.get('descricao')
+            }
 
-            db.session.add(nova_transacao)
+            nova_transacao = Transacao.create_sem_commit(dados_da_transacao)
+
             db.session.commit()
 
             return jsonify(nova_transacao.to_dict()), 201
