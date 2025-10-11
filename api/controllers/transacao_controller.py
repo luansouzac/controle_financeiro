@@ -5,6 +5,7 @@ from models.carteira_model import Carteira
 from models.saldo_model import Saldo
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
+from sqlalchemy import func, extract
 
 class TransacaoController:
 
@@ -121,3 +122,25 @@ class TransacaoController:
         except Exception as e:
             db.session.rollback()
             return jsonify({"erro": "Erro ao deletar transação", "detalhes": str(e)}), 500
+    @staticmethod
+    @jwt_required()
+    def get_dashboard():
+        id_usuario_logado = get_jwt_identity()
+        mes = request.args.get('mes', datetime.now().month, type=int)
+        ano = request.args.get('ano', datetime.now().year, type=int)
+
+        base_query = db.session.query(func.sum(Transacao.valor)).join(Carteira).filter(
+            Carteira.id_usuario == id_usuario_logado,
+            extract('month', Transacao.criado_em) == mes,
+            extract('year', Transacao.criado_em) == ano
+        )
+
+        total_receitas = base_query.filter(Transacao.tipo == True).scalar() or float('0.00')
+        total_despesas = base_query.filter(Transacao.tipo == False).scalar() or float('0.00')
+
+        return jsonify({
+            "total_receitas": str(total_receitas),
+            "total_despesas": str(total_despesas),
+            "saldo_do_mes": str(total_receitas - total_despesas)
+        })
+            

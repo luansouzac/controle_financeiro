@@ -87,6 +87,10 @@ def create_transacao():
 def delete_transacao(transacao_id):
     return TransacaoController.delete_transacao(transacao_id)
 
+@routes_bp.route('/user/dashboard', methods=['GET'])
+def get_dashboard():
+    return TransacaoController.get_dashboard()
+
 
 
 # @routes_bp.route('/posts', methods=['GET'])
