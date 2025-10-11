@@ -4,6 +4,7 @@ from models.transacao_model import Transacao
 from models.carteira_model import Carteira
 from models.saldo_model import Saldo
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 class TransacaoController:
 
@@ -11,17 +12,26 @@ class TransacaoController:
     @jwt_required()
     def get_minhas_transacoes():
         id_usuario_logado = get_jwt_identity()
-        
-        # filtros para as transacoes, ex: /transacoes?carteira_id=1
-        carteira_id_filtro = request.args.get('carteira_id', type=int)
-
         query = Transacao.query.join(Carteira).filter(Carteira.id_usuario == id_usuario_logado)
 
-        if carteira_id_filtro:
-            query = query.filter(Transacao.id_carteira == carteira_id_filtro)
+        # filtro carteira
+        if 'carteira_id' in request.args:
+            query = query.filter(Transacao.id_carteira == request.args.get('carteira_id', type=int))
+
+        # filtro por tipo de transacao
+        if 'tipo' in request.args:
+            if request.args['tipo'].lower() == 'receita':
+                query = query.filter(Transacao.tipo == True)
+            elif request.args['tipo'].lower() == 'despesa':
+                query = query.filter(Transacao.tipo == False)
+
+        # filtro de data
+        if 'data_inicio' in request.args:
+            query = query.filter(Transacao.criado_em >= datetime.fromisoformat(request.args['data_inicio']))
+        if 'data_fim' in request.args:
+            query = query.filter(Transacao.criado_em <= datetime.fromisoformat(request.args['data_fim']))
 
         transacoes = query.order_by(Transacao.criado_em.desc()).all()
-        
         return jsonify([t.to_dict() for t in transacoes])
     
     @staticmethod
