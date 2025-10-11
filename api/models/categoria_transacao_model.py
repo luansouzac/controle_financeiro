@@ -1,5 +1,5 @@
 from models import db
-from datetime import datetime
+from sqlalchemy.sql import func 
 
 class CategoriaTransacao(db.Model):
     __tablename__ = 'categorias_transacoes'
@@ -7,7 +7,7 @@ class CategoriaTransacao(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(255), nullable=True)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, server_default=func.now())
 
     transacoes = db.relationship('Transacao', back_populates='categoria', cascade="all, delete-orphan")
 

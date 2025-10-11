@@ -21,7 +21,7 @@ class CarteiraController:
         return jsonify({"error": "Carteira não encontrada"}), 404
     
     @staticmethod
-    @jwt_required
+    @jwt_required()
     def get_minhas_carteiras():
         id_usuario_logado = get_jwt_identity()
         carteiras_do_usuario = Carteira.query.filter_by(id_usuario=id_usuario_logado).all()
@@ -58,7 +58,7 @@ class CarteiraController:
             return jsonify({"erro": "Erro ao criar carteira", "detalhes": str(e)}), 500
     @staticmethod
     @jwt_required()
-    def update_carteira(carteira_id, data):
+    def update_carteira(carteira_id):
         id_usuario_logado = get_jwt_identity()
         data = request.get_json()
 
@@ -70,9 +70,9 @@ class CarteiraController:
         carteira.update(data)
         return jsonify(carteira.to_dict())
     @staticmethod 
+    @jwt_required()
     def delete_carteira(carteira_id):
         id_usuario_logado = get_jwt_identity()
-        data = request.get_json()
 
         carteira = Carteira.query.filter_by(id=carteira_id, id_usuario=id_usuario_logado).first()
         if not carteira:

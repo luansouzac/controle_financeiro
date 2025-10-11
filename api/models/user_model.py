@@ -1,5 +1,5 @@
 from models import db
-from datetime import datetime
+from sqlalchemy.sql import func 
 import bcrypt
 
 class User(db.Model):
@@ -10,7 +10,7 @@ class User(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha = db.Column(db.String(255), nullable=False)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, server_default=func.now())
 
     carteiras = db.relationship('Carteira', back_populates='usuario', cascade="all, delete-orphan")
     def to_dict(self):

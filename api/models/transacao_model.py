@@ -1,5 +1,5 @@
 from models import db
-from datetime import datetime
+from sqlalchemy.sql import func 
 
 class Transacao(db.Model):
     __tablename__ = 'transacoes'
@@ -10,7 +10,7 @@ class Transacao(db.Model):
     tipo = db.Column(db.Boolean, nullable=False)  # False (0) para receita, True (1) para despesa
     valor = db.Column(db.Float, nullable=False)
     descricao = db.Column(db.Text, nullable=True)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, server_default=func.now())
 
     carteira = db.relationship('Carteira', back_populates='transacoes')
     categoria = db.relationship('CategoriaTransacao', back_populates='transacoes')

@@ -1,5 +1,5 @@
 from models import db
-from datetime import datetime
+from sqlalchemy.sql import func 
 
 class Saldo(db.Model):
     __tablename__ = 'saldos'
@@ -7,8 +7,8 @@ class Saldo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_carteira = db.Column(db.Integer, db.ForeignKey('carteiras.id'), nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
-    ult_atualizacao = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, server_default=func.now())
+    ult_atualizacao = db.Column(db.DateTime, server_default=func.now(), server_onupdate=func.now())
 
     carteira = db.relationship('Carteira', back_populates='saldo')
     def to_dict(self):

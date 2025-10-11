@@ -1,5 +1,5 @@
 from models import db
-from datetime import datetime
+from sqlalchemy.sql import func 
 
 class Carteira(db.Model):
     __tablename__ = 'carteiras'
@@ -8,7 +8,7 @@ class Carteira(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.Text, nullable=True)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, server_default=func.now())
 
     usuario = db.relationship('User', back_populates='carteiras')
     saldo = db.relationship('Saldo', back_populates='carteira', uselist=False, cascade="all, delete-orphan")
