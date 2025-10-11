@@ -6,26 +6,31 @@ from models.saldo_model import Saldo
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class TransacaoController:
+
     @staticmethod
-    def get_transacoes():
-        transacoes_list = Transacao.get_all_transacoes()
-        return jsonify([t.to_dict() for t in transacoes_list])
+    @jwt_required()
+    def get_minhas_transacoes():
+        id_usuario_logado = get_jwt_identity()
+        
+        # filtros para as transacoes, ex: /transacoes?carteira_id=1
+        carteira_id_filtro = request.args.get('carteira_id', type=int)
+
+        query = Transacao.query.join(Carteira).filter(Carteira.id_usuario == id_usuario_logado)
+
+        if carteira_id_filtro:
+            query = query.filter(Transacao.id_carteira == carteira_id_filtro)
+
+        transacoes = query.order_by(Transacao.criado_em.desc()).all()
+        
+        return jsonify([t.to_dict() for t in transacoes])
+    
     @staticmethod
     def get_transacao_by_id(transacao_id):
         transacao = Transacao.get_by_id(transacao_id)
         if transacao:
             return jsonify(transacao.to_dict())
         return jsonify({"error": "Transação nao encontrada"}), 404
-    @staticmethod
-    @jwt_required()
-    def get_minhas_transacoes():
-        id_usuario_logado = get_jwt_identity()
-        
-        transacoes_do_usuario = Transacao.query.join(Carteira).filter(Carteira.id_usuario == id_usuario_logado).all()
-
-        resultado = [transacao.to_dict() for transacao in transacoes_do_usuario]
-
-        return jsonify(resultado), 200
+    
     @staticmethod
     @jwt_required()
     def create_transacao():
@@ -72,19 +77,33 @@ class TransacaoController:
             return jsonify(nova_transacao.to_dict()), 201
         except Exception as e:
             db.session.rollback()
-            return jsonify({"erro": "Erro ao criar transação", "detalhes": str(e)}), 500
+            return jsonify({"erro": "Erro ao criar transação", "detalhes": str(e)}), 500    
     @staticmethod
-    def update_transacao(transacao_id, transacao_data):
-        transacao = Transacao.get_by_id(transacao_id)
-        if not transacao:
-            return jsonify({"error": "Transação nao encontrada"}), 404
-        
-        updated_transacao = Transacao.update(transacao_id, transacao_data)
-        return jsonify(updated_transacao.to_dict())
-    @staticmethod
+    @jwt_required()
     def delete_transacao(transacao_id):
-        transacao = Transacao.get_by_id(transacao_id)
+        id_usuario_logado = get_jwt_identity()
+
+        transacao = Transacao.query.join(Carteira).filter(
+            Transacao.id == transacao_id,
+            Carteira.id_usuario == id_usuario_logado
+        ).first()
+
         if not transacao:
-            return jsonify({"error": "Transação nao encontrada"}), 404
-        Transacao.delete(transacao_id)
-        return jsonify({"message": "Transação deletada com sucesso"}), 200
+            return jsonify({"erro": "Transação não encontrada"}), 404
+        
+        try:
+            saldo = Saldo.query.filter_by(id_carteira=transacao.id_carteira).first()
+            if transacao.tipo:  # Se a transação era uma RECEITA (True), o dinheiro SAI
+                saldo.valor -= transacao.valor
+            else:  # Se a transação era uma DESPESA (False), o dinheiro VOLTA
+                saldo.valor += transacao.valor
+            
+            transacao.delete_sem_commit()
+
+            db.session.commit()
+            
+            return jsonify({"mensagem": "Transação deletada com sucesso"})
+
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"erro": "Erro ao deletar transação", "detalhes": str(e)}), 500

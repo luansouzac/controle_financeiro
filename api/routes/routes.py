@@ -92,26 +92,18 @@ def update_categoria(categoria_id):
 def delete_categoria(categoria_id):
     return CategoriaTransacaoController.delete_categoria(categoria_id)
 
-@routes_bp.route('/transacoes', methods=['GET'])
-def transacoes():
-    return TransacaoController.get_transacoes()
-@routes_bp.route('/transacoes/<int:transacao_id>', methods=['GET'])
-def transacao_detail(transacao_id):
-    return TransacaoController.get_transacao_by_id(transacao_id)
-@routes_bp.route('/me/transacoes', methods=['GET'])
+@routes_bp.route('/user/transacoes', methods=['GET'])
 def get_minhas_transacoes():
     return TransacaoController.get_minhas_transacoes()
-@routes_bp.route('/transacoes', methods=['POST'])
+@routes_bp.route('/user/transacoes/<int:transacao_id>', methods=['GET'])
+def transacao_detail(transacao_id):
+    return TransacaoController.get_transacao_by_id(transacao_id)
+@routes_bp.route('/user/transacoes', methods=['POST'])
 def create_transacao():
     return TransacaoController.create_transacao()
-@routes_bp.route('/transacoes/<int:transacao_id>', methods=['PUT'])
-def update_transacao(transacao_id):
-    transacao_data = request.get_json()
-    return TransacaoController.update_transacao(transacao_id, transacao_data)
-@routes_bp.route('/transacoes/<int:transacao_id>', methods=['DELETE'])
+@routes_bp.route('/user/transacoes/<int:transacao_id>', methods=['DELETE'])
 def delete_transacao(transacao_id):
     return TransacaoController.delete_transacao(transacao_id)
-
 
 
 
