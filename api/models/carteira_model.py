@@ -13,17 +13,7 @@ class Carteira(db.Model):
     usuario = db.relationship('User', back_populates='carteiras')
     saldo = db.relationship('Saldo', back_populates='carteira', uselist=False, cascade="all, delete-orphan")
     transacoes = db.relationship('Transacao', back_populates='carteira', cascade="all, delete-orphan", lazy='dynamic')
-
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "id_usuario": self.id_usuario,
-            "nome": self.nome,
-            "descricao": self.descricao,
-            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
-            if self.criado_em else None
-        }
+    #metodos de classe usam o classmethodo (cls)
     @classmethod
     def get_all_carteiras(cls):
         return cls.query.all()
@@ -38,19 +28,23 @@ class Carteira(db.Model):
         db.session.commit()
         return carteira
     
-    def update(cls, carteira_id, carteira_data):
-        carteira = cls.get_by_id(carteira_id)
-        if not carteira:
-            return None
-        for key, value in carteira_data.items():
-            setattr(carteira, key, value)
+    #metodos de instacia, para atualizar ou deletar o proprio objeto, utilizando o self
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "id_usuario": self.id_usuario,
+            "nome": self.nome,
+            "descricao": self.descricao,
+            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
+            if self.criado_em else None
+        }
+
+    def update(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
         db.session.commit()
-        return carteira
-    
-    def delete(cls, carteira_id):
-        carteira = cls.get_by_id(carteira_id)
-        if not carteira:
-            return None
-        db.session.delete(carteira)
+        return self
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
-        return carteira
