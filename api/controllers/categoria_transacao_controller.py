@@ -1,4 +1,5 @@
-from flask import jsonify
+from flask import request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.categoria_transacao_model import CategoriaTransacao
 
 class CategoriaTransacaoController:
@@ -13,22 +14,32 @@ class CategoriaTransacaoController:
             return jsonify(categoria.to_dict())
         return jsonify({"error": "Categoria não encontrada"}), 404
     @staticmethod
-    def create_categoria(categoria_data):
-        new_categoria = CategoriaTransacao.create(categoria_data)
+    #@jwt_required()
+    def create_categoria():
+        data = request.get_json()
+        if not data or not data.get('nome'):
+            return jsonify({"error": "O campo 'nome' é obrigatório"}), 400
+        new_categoria = CategoriaTransacao.create(data)
         return jsonify(new_categoria.to_dict()), 201
     @staticmethod
-    def update_categoria(categoria_id, categoria_data):
+    #@jwt_required()
+    def update_categoria(categoria_id):
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Nenhum dado fornecido para atualização"}), 400
+        
         categoria = CategoriaTransacao.get_by_id(categoria_id)
         if not categoria:
             return jsonify({"error": "Categoria não encontrada"}), 404
         
-        updated_categoria = CategoriaTransacao.update(categoria_id, categoria_data)
-        return jsonify(updated_categoria.to_dict())
+        categoria.update(data)
+        return jsonify(categoria.to_dict())
     @staticmethod
-    def delete_categoria(categoria_id):
+    #@jwt_required()
+    def delete_categoria(categoria_id):        
         categoria = CategoriaTransacao.get_by_id(categoria_id)
         if not categoria:
             return jsonify({"error": "Categoria não encontrada"}), 404
         
-        CategoriaTransacao.delete(categoria_id)
+        categoria.delete()
         return jsonify({"message": "Categoria deletada com sucesso"}), 200

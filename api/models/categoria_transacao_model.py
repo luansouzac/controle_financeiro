@@ -11,15 +11,7 @@ class CategoriaTransacao(db.Model):
 
     transacoes = db.relationship('Transacao', back_populates='categoria', cascade="all, delete-orphan")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "nome": self.nome,
-            "descricao": self.descricao,
-            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
-            if self.criado_em else None
-        }
-    
+    #metodos de classe usam o classmethodo (cls)
     @classmethod
     def get_all_categorias(cls):
         return cls.query.all()
@@ -32,19 +24,24 @@ class CategoriaTransacao(db.Model):
         db.session.add(categoria)
         db.session.commit()
         return categoria
-    def update(cls, categoria_id, categoria_data):
-        categoria = cls.get_by_id(categoria_id)
-        if not categoria:
-            return None
-        for key, value in categoria_data.items():
-            setattr(categoria, key, value)
+    
+    #metodos de instacia, para atualizar ou deletar o proprio objeto, utilizando o self
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "descricao": self.descricao,
+            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
+            if self.criado_em else None
+        }
+    
+    
+    def update(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
         db.session.commit()
-        return categoria
-    def delete(cls, categoria_id):
-        categoria = cls.get_by_id(categoria_id)
-        if not categoria:
-            return None
-        db.session.delete(categoria)
+        return self
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
-        return categoria
     
