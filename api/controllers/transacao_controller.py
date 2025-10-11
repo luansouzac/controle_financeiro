@@ -62,6 +62,8 @@ class TransacaoController:
             if tipo:
                 saldo.valor += valor
             else:
+                if saldo.valor < valor:
+                    return jsonify({"erro": "Saldo insuficiente"}), 400
                 saldo.valor -= valor
 
             dados_da_transacao = {

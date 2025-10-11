@@ -39,7 +39,8 @@ class Transacao(db.Model):
             "valor": float(self.valor) if self.valor is not None else None,
             "descricao": self.descricao,
             "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
-            if self.criado_em else None
+            if self.criado_em else None,
+            "saldo_atual_carteira": str(self.carteira.saldo.valor) if self.carteira and self.carteira.saldo else "N/A"
         }
     
     @classmethod
@@ -48,26 +49,4 @@ class Transacao(db.Model):
     @classmethod
     def get_by_id(cls, transacao_id):
         return cls.query.get(transacao_id)
-    # @classmethod
-    # def create(cls, transacao_data):
-    #     transacao = cls(**transacao_data)
-    #     db.session.add(transacao)
-    #     db.session.commit()
-    #     return transacao
-    # def update(cls, transacao_id, transacao_data):
-    #     transacao = cls.get_by_id(transacao_id)
-    #     if not transacao:
-    #         return None
-    #     for key, value in transacao_data.items():
-    #         setattr(transacao, key, value)
-    #     db.session.commit()
-    #     return transacao
-    # def delete(cls, transacao_id):
-    #     transacao = cls.get_by_id(transacao_id)
-    #     if not transacao:
-    #         return None
-    #     db.session.delete(transacao)
-    #     db.session.commit()
-    #     return transacao
-
-       
+   
