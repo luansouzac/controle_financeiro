@@ -35,8 +35,8 @@ class Carteira(db.Model):
             "id_usuario": self.id_usuario,
             "nome": self.nome,
             "descricao": self.descricao,
-            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
-            if self.criado_em else None
+            "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S") if self.criado_em else None,
+            "saldo": str(self.saldo.valor) if self.saldo else "Sem saldo"
         }
 
     def update(self, data):

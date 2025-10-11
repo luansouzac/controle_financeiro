@@ -48,7 +48,7 @@ def update_carteira(carteira_id):
 @routes_bp.route('/carteiras/<int:carteira_id>', methods=['DELETE'])
 def delete_carteira(carteira_id):
     return CarteiraController.delete_carteira(carteira_id)
-@routes_bp.route('/me/carteiras', methods=['GET'])
+@routes_bp.route('/user/carteiras', methods=['GET'])
 def get_minhas_carteiras():
     return CarteiraController.get_minhas_carteiras()
 
@@ -58,17 +58,6 @@ def saldos():
 @routes_bp.route('/saldos/<int:saldo_id>', methods=['GET'])
 def saldo_detail(saldo_id):
     return SaldoController.get_saldo_by_id(saldo_id)
-# @routes_bp.route('/saldos', methods=['POST'])
-# def create_saldo():
-#     saldo_data = request.get_json()
-#     return SaldoController.create_saldo(saldo_data)
-# @routes_bp.route('/saldos/<int:saldo_id>', methods=['PUT'])
-# def update_saldo(saldo_id):
-#     saldo_data = request.get_json()
-#     return SaldoController.update_saldo(saldo_id, saldo_data)
-# @routes_bp.route('/saldos/<int:saldo_id>', methods=['DELETE'])
-# def delete_saldo(saldo_id):
-#     return SaldoController.delete_saldo(saldo_id)
 
 @routes_bp.route('/categorias_transacao', methods=['GET'])
 def categorias():
