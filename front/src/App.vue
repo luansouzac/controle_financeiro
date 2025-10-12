@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <v-layout>
-      <Navbar />
+      <Navbar v-if="shouldShowNavbar" />
 
-      <v-main style="background-color: #F7F8FA;">
+      <v-main>
         <router-view />
       </v-main>
     </v-layout>
@@ -11,7 +11,15 @@
 </template>
 
 <script setup lang="ts">
-  import Navbar from '@/components/Navbar.vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import Navbar from './components/Navbar.vue';
+
+const route = useRoute();
+
+const shouldShowNavbar = computed(() => {
+  return route.name !== 'Login' && route.name !== 'Register';
+});
 </script>
 
 <style>
