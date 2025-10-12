@@ -1,27 +1,17 @@
 <template>
   <v-app>
-    <NavbarDrawer />
-    <v-main>
-      <v-container fluid>
-        <v-card style="height: 250px">
-          <TheWelcome />
-        </v-card>
+    <v-layout>
+      <Navbar />
+
+      <v-main style="background-color: #f7f8fa;">
         <router-view />
-      </v-container>
-    </v-main>
+      </v-main>
+    </v-layout>
   </v-app>
 </template>
 
-<script lang="ts">
-import NavbarDrawer from './components/Navbar.vue'
-import TheWelcome from './components/TheWelcome.vue'
-export default {
-  name: 'App',
-  components: {
-    NavbarDrawer,
-    TheWelcome,
-  },
-}
+<script setup lang="ts">
+  import Navbar from '@/components/Navbar.vue';
 </script>
 
 <style>
