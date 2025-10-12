@@ -3,7 +3,7 @@
     <v-layout>
       <Navbar />
 
-      <v-main style="background-color: #f7f8fa;">
+      <v-main style="background-color: #F7F8FA;">
         <router-view />
       </v-main>
     </v-layout>
