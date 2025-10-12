@@ -72,7 +72,25 @@
         to="/about"
       ></v-list-item>
     </v-list>
+
+    <v-divider></v-divider>
+
+    <template v-slot:append>
+      <v-divider></v-divider>
+      <v-list density="compact" nav>
+        <v-list-item
+          prepend-icon="mdi-logout"
+          title="Sair"
+          value="logout"
+          @click="authStore.logout()"
+        ></v-list-item>
+      </v-list>
+    </template>
+
   </v-navigation-drawer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { useAuthStore } from '@/stores/auth';
+  const authStore = useAuthStore();
+</script>

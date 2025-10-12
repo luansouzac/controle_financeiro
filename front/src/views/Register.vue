@@ -115,12 +115,12 @@ async function handleRegister() {
       senha: senha.value
     });
 
-    message.value = 'Cadastro realizado com sucesso! Você será redirecionado.';
+    message.value = 'Cadastro realizado com sucesso! Você será redirecionado para a tela de login.';
     messageType.value = 'success';
 
     setTimeout(() => {
       router.push('/');
-    }, 2000);
+    }, 1000);
 
   } catch (error: any) {
     message.value = error.response?.data?.erro || 'Ocorreu um erro ao registrar. Tente novamente.';
