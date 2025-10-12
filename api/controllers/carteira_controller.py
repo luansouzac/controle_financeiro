@@ -6,7 +6,8 @@ from models import db
 
 
 class CarteiraController:
-    @staticmethod 
+    @staticmethod
+    @jwt_required() 
     def get_carteiras():
         carteiras_list = Carteira.get_all_carteiras()
         return jsonify([c.to_dict() for c in carteiras_list])

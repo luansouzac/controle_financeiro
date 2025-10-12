@@ -43,8 +43,7 @@ def create_carteira():
     return CarteiraController.create_carteira()
 @routes_bp.route('/carteiras/<int:carteira_id>', methods=['PUT'])
 def update_carteira(carteira_id):
-    carteira_data = request.get_json()
-    return CarteiraController.update_carteira(carteira_id, carteira_data)
+    return CarteiraController.update_carteira(carteira_id)
 @routes_bp.route('/carteiras/<int:carteira_id>', methods=['DELETE'])
 def delete_carteira(carteira_id):
     return CarteiraController.delete_carteira(carteira_id)
@@ -87,6 +86,10 @@ def create_transacao():
 @routes_bp.route('/user/transacoes/<int:transacao_id>', methods=['DELETE'])
 def delete_transacao(transacao_id):
     return TransacaoController.delete_transacao(transacao_id)
+
+@routes_bp.route('/user/dashboard', methods=['GET'])
+def get_dashboard():
+    return TransacaoController.get_dashboard()
 
 
 

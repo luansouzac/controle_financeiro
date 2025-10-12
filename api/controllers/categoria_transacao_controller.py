@@ -4,17 +4,19 @@ from models.categoria_transacao_model import CategoriaTransacao
 
 class CategoriaTransacaoController:
     @staticmethod
+    @jwt_required()
     def get_categorias():
         categorias = CategoriaTransacao.get_all_categorias()
         return jsonify([categoria.to_dict() for categoria in categorias])
     @staticmethod
+    @jwt_required()
     def get_categoria_by_id(categoria_id):
         categoria = CategoriaTransacao.get_by_id(categoria_id)
         if categoria:
             return jsonify(categoria.to_dict())
         return jsonify({"error": "Categoria não encontrada"}), 404
     @staticmethod
-    #@jwt_required()
+    @jwt_required()
     def create_categoria():
         data = request.get_json()
         if not data or not data.get('nome'):
@@ -22,7 +24,7 @@ class CategoriaTransacaoController:
         new_categoria = CategoriaTransacao.create(data)
         return jsonify(new_categoria.to_dict()), 201
     @staticmethod
-    #@jwt_required()
+    @jwt_required()
     def update_categoria(categoria_id):
         data = request.get_json()
         if not data:
@@ -35,7 +37,7 @@ class CategoriaTransacaoController:
         categoria.update(data)
         return jsonify(categoria.to_dict())
     @staticmethod
-    #@jwt_required()
+    @jwt_required()
     def delete_categoria(categoria_id):        
         categoria = CategoriaTransacao.get_by_id(categoria_id)
         if not categoria:
