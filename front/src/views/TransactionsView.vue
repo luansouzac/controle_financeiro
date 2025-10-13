@@ -53,7 +53,7 @@
                 <div class="text-right">
                   <p
                     class="font-weight-bold"
-                    :class="transaction.tipo === 'Receita' ? 'text-green' : 'text-grey-darken-3'"
+                    :class="transaction.tipo === 'Receita' ? 'text-green' : 'text-red'"
                   >
                     {{ formatCurrency(transaction.valor) }}
                   </p>
