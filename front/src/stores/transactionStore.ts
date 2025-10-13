@@ -58,5 +58,16 @@ export const useTransactionStore = defineStore('transactions', () => {
     }
   }
 
-  return { transactions, loading, fetchTransactions, createTransaction, deleteTransaction };
+  const getTransactionsFromLastDays = (days: number) => {
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - days);
+
+    return transactions.value.filter(t => {
+      const transactionDate = new Date(t.criado_em);
+      return transactionDate >= startDate && transactionDate <= today;
+    });
+  };
+
+  return { transactions, loading, fetchTransactions, createTransaction, deleteTransaction, getTransactionsFromLastDays, };
 });
