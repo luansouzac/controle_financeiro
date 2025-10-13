@@ -34,8 +34,13 @@
     </v-list>
 
     <v-divider></v-divider>
-
     <v-list density="compact" nav>
+      <v-list-item
+        prepend-icon="mdi-tag-multiple-outline"
+        title="Categorias"
+        value="categories"
+        to="/categories"
+      ></v-list-item>
       <v-list-item
         prepend-icon="mdi-wallet-outline"
         title="Carteiras"
@@ -86,11 +91,10 @@
         ></v-list-item>
       </v-list>
     </template>
-
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '@/stores/auth';
-  const authStore = useAuthStore();
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
 </script>

@@ -7,6 +7,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/Register.vue'
 import WalletsView from '@/views/WalletsView.vue'
+import CategoyView from '@/views/CategoyView.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/wallets',
     name: 'Wallets',
     component: WalletsView,
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    component: CategoyView,
   },
 ]
 
