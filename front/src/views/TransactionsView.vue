@@ -96,12 +96,14 @@
               color="primary"
             ></v-switch>
             <v-text-field
-              v-model="newTransaction.valor"
+              v-model="valorFormatado"
               label="Valor"
-              type="number"
               prefix="R$"
               variant="outlined"
               required
+              inputmode="numeric"
+              :class="{ 'text-error': !newTransaction.isRecipe }"
+              :color="newTransaction.isRecipe ? 'primary' : 'error'"
             ></v-text-field>
             <v-text-field
               v-model="newTransaction.descricao"
@@ -156,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useTransactionStore, type Transaction } from '@/stores/transactionStore'
 import { useWalletStore } from '@/stores/walletStore'
 import { useCategoryStore } from '@/stores/categoryStore'
@@ -183,6 +185,26 @@ const newTransaction = ref({
   id_categoria: null as number | null,
 })
 
+const valorFormatado = ref('')
+
+watch(valorFormatado, (newValue) => {
+  const digits = newValue.toString().replace(/\D/g, '')
+  if (!digits) {
+    newTransaction.value.valor = ''
+    return
+  }
+
+  newTransaction.value.valor = (parseInt(digits, 10) / 100).toFixed(2)
+
+  const formattedForDisplay = (parseInt(digits, 10) / 100).toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+  })
+
+  if (formattedForDisplay !== valorFormatado.value) {
+    valorFormatado.value = formattedForDisplay
+  }
+})
+
 onMounted(() => {
   walletStore.fetchWallets()
   categoryStore.fetchCategories()
@@ -197,6 +219,7 @@ const openCreateDialog = () => {
     id_carteira: null,
     id_categoria: null,
   }
+  valorFormatado.value = ''
   createDialog.value = true
 }
 
