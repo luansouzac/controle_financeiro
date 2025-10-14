@@ -3,9 +3,17 @@ import api from '@/services/api';
 import { ref } from 'vue';
 import router from '@/router';
 
+export interface User {
+  id: number;
+  nome: string;
+  email: string;
+  cpf: string;
+  criado_em: string;
+}
+
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(sessionStorage.getItem('authToken') || null);
-  const user = ref(null);
+  const user = ref<User | null>(null);
 
   async function login(credentials: { email: string, senha: string }) {
     try {
@@ -40,5 +48,25 @@ export const useAuthStore = defineStore('auth', () => {
     router.push('/login');
   }
 
-  return { token, user, login, fetchUser, logout };
+   async function updateUser(data: { nome?: string, email?: string, senha?: string }) {
+    try {
+      const response = await api.put('/user', data);
+      user.value = response.data; 
+    } catch (error) {
+      console.error("Erro ao atualizar o perfil:", error);
+      throw error; 
+    }
+  }
+
+  async function deleteAccount() {
+    try {
+      await api.delete('/user');
+      logout();
+    } catch (error) {
+      console.error("Erro ao deletar a conta:", error);
+      throw error;
+    }
+  }
+
+  return { token, user, login, fetchUser, logout, updateUser, deleteAccount };
 });

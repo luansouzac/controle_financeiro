@@ -10,6 +10,7 @@ import WalletsView from '@/views/WalletsView.vue'
 import CategoyView from '@/views/CategoyView.vue'
 import IncomeView from '@/views/IncomeView.vue'
 import ExpensesView from '@/views/ExpensesView.vue'
+import SettingsView from '@/views/SettingsView.vue'
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     path: '/expenses',
     name: 'Expenses',
     component: ExpensesView,
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: SettingsView,
   },
 
 ]
