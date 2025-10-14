@@ -1,161 +1,129 @@
 <template>
-  <v-container fluid class="pa-4">
-    <!-- Saudações -->
-    <v-row class="mb-6">
-      <v-col cols="12">
-        <v-typography variant="h4" class="font-weight-bold mb-1">Olá, Sandra!</v-typography>
-        <v-typography variant="body2" class="text--secondary"
-          >Aqui está seu resumo financeiro de Outubro.</v-typography
-        >
+  <v-container fluid class="pa-6">
+    <v-row>
+      <v-col>
+        <h1 class="text-h4 font-weight-bold text-grey-darken-3">Bem-vindo, Luan! 👋</h1>
+        <p class="text-medium-emphasis">Aqui está o seu resumo financeiro de hoje.</p>
       </v-col>
     </v-row>
 
-    <!-- Cards de resumo -->
-    <v-row class="mb-6" dense>
-      <v-col cols="12" sm="6" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center justify-space-between">
-            <v-icon large color="primary">mdi-wallet</v-icon>
-            <div>
-              <div class="text-caption text--secondary">Saldo Total</div>
-              <div class="font-weight-bold text-h6">R$ 12.450,75</div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center justify-space-between">
-            <v-icon large color="green">mdi-arrow-up</v-icon>
-            <div>
-              <div class="text-caption text--secondary">Receitas do Mês</div>
-              <div class="font-weight-bold text-h6 green--text">R$ 7.200,00</div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center justify-space-between">
-            <v-icon large color="red">mdi-arrow-down</v-icon>
-            <div>
-              <div class="text-caption text--secondary">Despesas do Mês</div>
-              <div class="font-weight-bold text-h6 red--text">R$ 4.350,50</div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center justify-space-between">
-            <v-icon large color="teal">mdi-scale-balance</v-icon>
-            <div>
-              <div class="text-caption text--secondary">Balanço do Mês</div>
-              <div class="font-weight-bold text-h6 teal--text">R$ 2.849,50</div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- Gráficos -->
-    <v-row dense>
+    <v-divider class="my-4"></v-divider>
+    
+    <v-row>
       <v-col cols="12" md="8">
-        <v-card height="300px" class="d-flex align-center justify-center">
-          <v-typography variant="body2" class="text--secondary"
-            >Placeholder para Gráfico de Barras</v-typography
-          >
-        </v-card>
-      </v-col>
+        <v-fade-transition appear>
+          <div>
+            <v-card elevation="2" rounded="lg" class="mb-6">
+              <v-card-title class="text-h6 font-weight-bold">Ações Rápidas</v-card-title>
+              <v-card-text class="d-flex ga-4">
+                <v-btn color="success" size="large" class="flex-grow-1" prepend-icon="mdi-plus-circle-outline">
+                  Nova Receita
+                </v-btn>
+                <v-btn color="error" size="large" class="flex-grow-1" prepend-icon="mdi-minus-circle-outline">
+                  Nova Despesa
+                </v-btn>
+              </v-card-text>
+            </v-card>
+            
+            <v-card elevation="2" rounded="lg">
+              <v-card-title class="text-h6 font-weight-bold">Resumo das Carteiras</v-card-title>
+              <v-list class="py-0">
+                <v-list-item v-for="(wallet, i) in wallets" :key="wallet.id">
+                  <template v-slot:prepend>
+                    <v-avatar :color="walletColors[i % walletColors.length] + '-lighten-4'" class="mr-4">
+                      <v-icon :color="walletColors[i % walletColors.length]">{{ wallet.icon }}</v-icon>
+                    </v-avatar>
+                  </template>
 
+                  <v-list-item-title class="font-weight-bold">{{ wallet.name }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ formatCurrency(wallet.balance) }}</v-list-item-subtitle>
+
+                  <template v-slot:append>
+                    <div class="d-flex flex-column align-end" style="width: 120px;">
+                      <span class="text-caption font-weight-bold">{{ ((wallet.balance / totalBalance) * 100).toFixed(0) }}%</span>
+                      <v-progress-linear
+                        :model-value="((wallet.balance / totalBalance) * 100)"
+                        :color="walletColors[i % walletColors.length]"
+                        height="6"
+                        rounded
+                        class="mt-1"
+                      ></v-progress-linear>
+                    </div>
+                  </template>
+                </v-list-item>
+              </v-list>
+              <v-card-actions>
+                <v-btn block color="primary" variant="text" to="/wallets">Gerenciar Carteiras</v-btn>
+              </v-card-actions>
+            </v-card>
+          </div>
+        </v-fade-transition>
+      </v-col>
+      
       <v-col cols="12" md="4">
-        <v-card height="300px" class="pa-4">
-          <v-typography variant="subtitle1" class="mb-2">Gastos por Categoria</v-typography>
-          <v-row dense>
-            <v-col
-              cols="12"
-              v-for="(item, index) in gastos"
-              :key="index"
-              class="d-flex justify-space-between align-center"
-            >
-              <v-chip :color="item.color" small class="ma-0">{{ item.name }}</v-chip>
-              <span class="font-weight-bold">{{ item.valor }}</span>
-            </v-col>
-          </v-row>
-          <v-spacer></v-spacer>
-          <v-typography variant="body2" class="text--secondary text-center mt-2">
-            Placeholder para Gráfico de Rosca
-          </v-typography>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- Últimas transações -->
-    <v-row class="mt-6">
-      <v-col cols="12">
-        <v-card>
-          <v-card-title>Últimas Transações</v-card-title>
-          <v-divider></v-divider>
-          <v-list>
-            <v-list-item v-for="(t, i) in transacoes" :key="i">
-              <v-list-item-avatar>
-                <v-icon :color="t.type === 'expense' ? 'red' : 'green'">{{ t.icon }}</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{ t.nome }}</v-list-item-title>
-                <v-list-item-subtitle>{{ t.categoria }}</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <span :class="t.type === 'expense' ? 'red--text' : 'green--text'">{{
-                  t.valor
-                }}</span>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-        </v-card>
+        <v-fade-transition appear>
+          <v-card elevation="2" rounded="lg">
+            <v-card-title class="text-h6 font-weight-bold">Últimas Atividades</v-card-title>
+            <v-divider></v-divider>
+            <v-list lines="two">
+              <v-list-item v-for="t in recentTransactions" :key="t.id">
+                <template v-slot:prepend>
+                  <v-avatar :color="t.type === 'receita' ? 'success-lighten-4' : 'error-lighten-4'" size="40">
+                    <v-icon :color="t.type === 'receita' ? 'success' : 'error'">{{ t.icon }}</v-icon>
+                  </v-avatar>
+                </template>
+                <v-list-item-title class="font-weight-medium">{{ t.description }}</v-list-item-title>
+                <v-list-item-subtitle>{{ t.category }}</v-list-item-subtitle>
+                <template v-slot:append>
+                  <span class="font-weight-bold" :class="t.type === 'receita' ? 'text-success' : 'text-grey-darken-3'">
+                    {{ formatCurrency(t.amount) }}
+                  </span>
+                </template>
+              </v-list-item>
+            </v-list>
+             <v-card-actions>
+                <v-btn block color="primary" variant="text" to="/transactions">Ver Todas</v-btn>
+              </v-card-actions>
+          </v-card>
+        </v-fade-transition>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 
-export default defineComponent({
-  name: 'DashboardView',
-  data() {
-    return {
-      gastos: [
-        { name: 'Moradia', valor: 'R$ 1.800,00', color: 'blue darken-3' },
-        { name: 'Alimentação', valor: 'R$ 1.100,50', color: 'green' },
-        { name: 'Transporte', valor: 'R$ 650,00', color: 'yellow darken-2' },
-        { name: 'Lazer', valor: 'R$ 450,00', color: 'purple' },
-        { name: 'Outros', valor: 'R$ 350,00', color: 'grey' },
-      ],
-      transacoes: [
-        {
-          nome: 'Supermercado Pão de Açúcar',
-          categoria: 'Alimentação',
-          valor: '- R$ 345,50',
-          type: 'expense',
-          icon: 'mdi-cart',
-        },
-        {
-          nome: 'Salário Mensal',
-          categoria: 'Renda',
-          valor: '+ R$ 7.200,00',
-          type: 'income',
-          icon: 'mdi-cash',
-        },
-      ],
-    }
-  },
-})
+// --- DADOS MOCKADOS ---
+
+// Mock para as carteiras
+const wallets = ref([
+  { id: 1, name: 'Carteira Principal', balance: 7450.50, icon: 'mdi-wallet' },
+  { id: 2, name: 'Poupança', balance: 15200.00, icon: 'mdi-piggy-bank' },
+  { id: 3, name: 'Investimentos', balance: 22800.75, icon: 'mdi-trending-up' },
+]);
+
+// Paleta de cores para os gráficos das carteiras
+const walletColors = ref(['primary', 'teal', 'deep-purple']);
+
+// Mock para as transações recentes
+const recentTransactions = ref([
+  { id: 1, description: 'Salário', category: 'Renda', amount: 7200.00, type: 'receita', icon: 'mdi-cash' },
+  { id: 2, description: 'Aluguel', category: 'Moradia', amount: -1800.00, type: 'despesa', icon: 'mdi-home' },
+  { id: 3, description: 'Supermercado', category: 'Alimentação', amount: -450.75, type: 'despesa', icon: 'mdi-cart' },
+  { id: 4, description: 'Freelance', category: 'Renda Extra', amount: 850.00, type: 'receita', icon: 'mdi-laptop' },
+  { id: 5, description: 'Cinema', category: 'Lazer', amount: -85.50, type: 'despesa', icon: 'mdi-movie' },
+]);
+
+// --- LÓGICA DA VIEW ---
+
+// Calcula o saldo total somando todas as carteiras
+const totalBalance = computed(() => {
+  return wallets.value.reduce((sum, wallet) => sum + wallet.balance, 0);
+});
+
+// Função para formatar os valores em moeda brasileira
+const formatCurrency = (value: number) => {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
 </script>
-
-<style scoped>
-/* Estilizações adicionais podem ser feitas aqui */
-</style>
