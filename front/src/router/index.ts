@@ -8,6 +8,8 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/Register.vue'
 import WalletsView from '@/views/WalletsView.vue'
 import CategoyView from '@/views/CategoyView.vue'
+import IncomeView from '@/views/IncomeView.vue'
+import ExpensesView from '@/views/ExpensesView.vue'
 
 const routes = [
   {
@@ -55,6 +57,17 @@ const routes = [
     name: 'Categories',
     component: CategoyView,
   },
+  {
+    path: '/incomes',
+    name: 'Incomes',
+    component: IncomeView,
+  },
+  {
+    path: '/expenses',
+    name: 'Expenses',
+    component: ExpensesView,
+  },
+
 ]
 
 const router = createRouter({

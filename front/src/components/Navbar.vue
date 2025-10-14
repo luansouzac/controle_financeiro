@@ -50,8 +50,8 @@
       <v-list-item
         prepend-icon="mdi-arrow-up-bold-circle-outline"
         title="Receitas"
-        value="income"
-        to="/income"
+        value="incomes"
+        to="/incomes"
       ></v-list-item>
       <v-list-item
         prepend-icon="mdi-arrow-down-bold-circle-outline"
