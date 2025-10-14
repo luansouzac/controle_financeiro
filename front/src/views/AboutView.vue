@@ -36,7 +36,7 @@
               <v-card-text>
                 <div class="d-flex align-center">
                   <v-avatar size="80" class="mr-6">
-                    <v-img src="https://i.pravatar.cc/150?u=luan" alt="Luan Silva"></v-img>
+                    <v-img src="https://avatars.githubusercontent.com/u/161772370?s=400&u=e9b0af46530d9492086368beafef2320c162d6c6&v=4" alt="Luan Silva"></v-img>
                   </v-avatar>
                   <div>
                     <h3 class="text-h6 font-weight-bold">Luan Souza</h3>
@@ -50,7 +50,7 @@
               <v-card-text>
                 <div class="d-flex align-center">
                   <v-avatar size="80" class="mr-6">
-                    <v-img src="https://i.pravatar.cc/150?u=luan" alt="Luan Silva"></v-img>
+                    <v-img src="https://avatars.githubusercontent.com/u/74503817?v=4" alt="Luan Silva"></v-img>
                   </v-avatar>
                   <div>
                     <h3 class="text-h6 font-weight-bold">Francisco Carlos</h3>
