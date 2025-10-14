@@ -33,7 +33,6 @@
                           size="small"
                           class="position-absolute"
                           style="bottom: 0; right: 0;"
-                          @click="onAvatarClick"
                         ></v-btn>
                       </div>
                     </v-col>
@@ -194,10 +193,10 @@ async function handleUpdatePassword() {
   }
 }
 
-function onAvatarClick() {
-  // Lógica para upload de imagem seria implementada aqui
-  showSnackbar('Funcionalidade de upload de foto ainda não implementada.', 'info');
-}
+// function onAvatarClick() {
+//   // Lógica para upload de imagem seria implementada aqui
+//   showSnackbar('Funcionalidade de upload de foto ainda não implementada.', 'info');
+// }
 
 // --- LÓGICA DE TEMA ---
 const isDarkMode = ref(theme.global.name.value === 'dark');
