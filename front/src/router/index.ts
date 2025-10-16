@@ -9,7 +9,6 @@ import RegisterView from '@/views/Register.vue'
 import WalletsView from '@/views/WalletsView.vue'
 import CategoyView from '@/views/CategoyView.vue'
 import IncomeView from '@/views/IncomeView.vue'
-import ExpensesView from '@/views/ExpensesView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 
 const routes = [
@@ -62,11 +61,19 @@ const routes = [
     path: '/incomes',
     name: 'Incomes',
     component: IncomeView,
+    props: (route: any) => ({
+      tipo: 'receita',
+      key: 'incomes'
+    }),
   },
   {
     path: '/expenses',
     name: 'Expenses',
-    component: ExpensesView,
+    component: IncomeView,
+    props: (route: any) => ({
+      tipo: 'despesa',
+      key: 'expenses'
+    }),
   },
   {
     path: '/settings',
