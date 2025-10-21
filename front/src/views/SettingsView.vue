@@ -83,14 +83,6 @@
                 </v-list-item>
               </v-list>
             </v-card>
-
-            <v-card variant="tonal" color="error" rounded="lg">
-              <v-card-title class="text-h6 font-weight-bold">Zona de Perigo</v-card-title>
-              <v-card-text>
-                <p class="mb-4">A exclusão da sua conta é uma ação permanente e irreversível.</p>
-                <v-btn color="error" variant="flat" @click="deleteDialog = true">Deletar Minha Conta</v-btn>
-              </v-card-text>
-            </v-card>
           </div>
         </v-fade-transition>
       </v-col>
@@ -181,7 +173,6 @@ async function handleUpdatePassword() {
   }
   passwordSaving.value = true;
   try {
-    // NOTA: Sua API precisa aceitar a 'senha' para que isso funcione.
     await authStore.updateUser({ senha: passwordData.value.new });
     showSnackbar('Senha alterada com sucesso!');
     passwordDialog.value = false;
@@ -202,17 +193,4 @@ async function handleUpdatePassword() {
 const isDarkMode = ref(theme.global.name.value === 'dark');
 const toggleTheme = () => theme.global.name.value = isDarkMode.value ? 'dark' : 'light';
 
-// --- LÓGICA DE DELETAR CONTA ---
-async function handleDeleteAccount() {
-  if (deleteConfirmationText.value !== 'deletar') return;
-
-  deleting.value = true;
-  try {
-    await authStore.deleteAccount();
-    // O logout e redirecionamento já são feitos pela store
-  } catch (error) {
-    // Adicionar snackbar de erro
-    deleting.value = false;
-  }
-}
 </script>
