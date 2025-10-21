@@ -20,7 +20,11 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = "123456789"  # Chave secreta demais
 app.config['JSON_SORT_KEYS'] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
+UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads', 'profile_pics')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db.init_app(app)
 jwt = JWTManager(app)
