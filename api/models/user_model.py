@@ -11,6 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha = db.Column(db.String(255), nullable=False)
     criado_em = db.Column(db.DateTime, server_default=func.now())
+    image = db.Column(db.String(255), nullable=True, default=None)
 
     carteiras = db.relationship('Carteira', back_populates='usuario', cascade="all, delete-orphan")
     def to_dict(self):
@@ -19,6 +20,7 @@ class User(db.Model):
             "cpf": self.cpf,
             "nome": self.nome,
             "email": self.email,
+            "image": self.image,
             "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S")
             if self.criado_em else None
         }

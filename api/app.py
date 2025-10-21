@@ -6,6 +6,7 @@ from models import db
 from flask_jwt_extended import JWTManager
 import os
 from datetime import timedelta
+from flask_migrate import Migrate
 
 load_dotenv()
 
@@ -24,6 +25,8 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
 db.init_app(app)
 jwt = JWTManager(app)
 app.register_blueprint(routes_bp)
+
+migrate = Migrate(app, db)
 
 
 @app.route('/')

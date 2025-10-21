@@ -55,3 +55,5 @@ docker-compose up --build
 ##Entrando no ambiente virtual python
 
 .\.venv\Scripts\activate
+
+flask db init
