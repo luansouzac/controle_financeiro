@@ -57,3 +57,5 @@ docker-compose up --build
 .\.venv\Scripts\activate
 
 flask db init
+
+para rodar as migrations docker-compose exec api flask db upgrade
