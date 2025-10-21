@@ -12,13 +12,9 @@
     <v-divider></v-divider>
 
     <v-list density="compact" nav>
+      <v-list-item v-for="route in routes" 
+      :key="route.name" :prepend-icon="route.icon" :title="route.name" :value="route.name" :to="route.path"></v-list-item>
       <v-list-item prepend-icon="mdi-home-outline" title="Home" value="home" to="/"></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-view-dashboard-outline"
-        title="Dashboard"
-        value="dashboard"
-        to="/dashboard"
-      ></v-list-item>
       <v-list-item
         prepend-icon="mdi-swap-horizontal"
         title="Transações"
@@ -96,5 +92,6 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
+import routes from '@/router'
 const authStore = useAuthStore()
 </script>
