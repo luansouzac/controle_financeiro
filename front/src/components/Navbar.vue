@@ -12,65 +12,13 @@
     <v-divider></v-divider>
 
     <v-list density="compact" nav>
-      <v-list-item v-for="route in routes" 
-      :key="route.name" :prepend-icon="route.icon" :title="route.name" :value="route.name" :to="route.path"></v-list-item>
-      <v-list-item prepend-icon="mdi-home-outline" title="Home" value="home" to="/"></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-swap-horizontal"
-        title="Transações"
-        value="transactions"
-        to="/transactions"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-chart-pie-outline"
-        title="Relatórios"
-        value="reports"
-        to="/reports"
-      ></v-list-item>
-    </v-list>
-
-    <v-divider></v-divider>
-    <v-list density="compact" nav>
-      <v-list-item
-        prepend-icon="mdi-tag-multiple-outline"
-        title="Categorias"
-        value="categories"
-        to="/categories"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-wallet-outline"
-        title="Carteiras"
-        value="wallets"
-        to="/wallets"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-arrow-up-bold-circle-outline"
-        title="Receitas"
-        value="incomes"
-        to="/incomes"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-arrow-down-bold-circle-outline"
-        title="Despesas"
-        value="expenses"
-        to="/expenses"
-      ></v-list-item>
-    </v-list>
-
-    <v-divider></v-divider>
-
-    <v-list density="compact" nav>
-      <v-list-item
-        prepend-icon="mdi-cog-outline"
-        title="Configurações"
-        value="settings"
-        to="/settings"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-information-outline"
-        title="Sobre"
-        value="about"
-        to="/about"
+      <v-list-item 
+        v-for="route in navigationRoutes" 
+        :key="route.name" 
+        :prepend-icon="route.icon"
+        :title="route.name" 
+        :value="route.name" 
+        :to="route.path"
       ></v-list-item>
     </v-list>
 
@@ -91,7 +39,33 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import routes from '@/router'
+import { routes } from '@/router'
+
 const authStore = useAuthStore()
+
+const routeConfig = {
+  'Home': { icon: 'mdi-home-outline'},
+  'Transactions': { icon: 'mdi-swap-horizontal'},
+  'Reports': { icon: 'mdi-chart-pie-outline'},
+  'Categories': { icon: 'mdi-tag-multiple-outline'},
+  'Wallets': { icon: 'mdi-wallet-outline'},
+  'Incomes': { icon: 'mdi-arrow-up-bold-circle-outline'},
+  'Expenses': { icon: 'mdi-arrow-down-bold-circle-outline'},
+  'Settings': { icon: 'mdi-cog-outline'},
+  'About': { icon: 'mdi-information-outline'}
+}
+
+const navigationRoutes = computed(() => {
+  const publicPages = ['Login', 'Register']
+  
+  return routes
+    .filter(route => !publicPages.includes(route.name as string))
+    .map(route => ({
+      name: route.name,
+      path: route.path,
+      icon: routeConfig[route.name as keyof typeof routeConfig]?.icon || 'mdi-circle-outline'
+    }))
+})
 </script>

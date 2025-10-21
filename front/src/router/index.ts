@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardView from '../views/DashboardView.vue'
 import TransactionsView from '../views/TransactionsView.vue'
 import ReportsView from '../views/ReportsView.vue'
 import AboutView from '../views/AboutView.vue'
@@ -26,11 +25,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: HomeView,
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: DashboardView,
   },
   {
     path: '/transactions',
@@ -103,3 +97,4 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router
+export { routes }
