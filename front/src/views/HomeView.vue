@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-6">
+  <v-container fluid class="pa-6 d-flex flex-column">
     <v-row align="center">
       <v-col>
         <h1 class="text-h4 font-weight-bold text-grey-darken-3">Resumo Financeiro</h1>
@@ -14,7 +14,7 @@
       <p class="mt-4 text-medium-emphasis">Analisando seus dados...</p>
     </div>
 
-    <div v-else>
+    <div v-else class="flex-1 d-flex flex-column">
       <v-row>
         <v-col cols="12" md="8">
           <v-fade-transition appear>
@@ -92,7 +92,6 @@
                   <p class="mt-2">Nenhuma despesa registrada este mês.</p>
                 </div>
               </v-card>
-
             </div>
           </v-fade-transition>
         </v-col>
@@ -139,6 +138,18 @@
           </v-fade-transition>
         </v-col>
       </v-row>
+      
+      <div class="d-flex justify-center mt-8 pb-4">
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-plus"
+          size="large"
+          class="font-weight-bold"
+          @click="$router.push({ name: 'Transactions' })"
+        >
+          Adicionar Transação
+        </v-btn>
+      </div>
     </div>
   </v-container>
 </template>
