@@ -1,23 +1,39 @@
 from flask import Flask
 from flask_cors import CORS
 from routes.routes import routes_bp
-from dotenv import load_dotenv
+# from dotenv import load_dotenv  # <-- REMOVA OU COMENTE ISSO
 from models import db
 from flask_jwt_extended import JWTManager
 import os
 from datetime import timedelta
 from flask_migrate import Migrate
 
-load_dotenv()
+# load_dotenv() # <-- REMOVA OU COMENTE ISSO
 
 app = Flask(__name__)
 
 CORS(app) 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# --- SEÇÃO MODIFICADA ---
+# 1. Capture as variáveis do docker-compose
+db_user = os.getenv('DB_USER')
+db_pass = os.getenv('DB_PASSWORD')
+db_host = os.getenv('DB_HOST')
+db_name = os.getenv('DB_NAME')
+
+# 2. Construa a URI. 
+#    A porta interna do container MySQL é 3306.
+#    (O 3307 é só para o SEU PC acessar, a API acessa pela porta 3306).
+db_uri = f"mysql+pymysql://{db_user}:{db_pass}@{db_host}:3306/{db_name}"
+
+print(f"--- String de Conexão Gerada: {db_uri} ---") # Linha de debug
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config["JWT_SECRET_KEY"] = "123456789"  # Chave secreta demais
+# --- FIM DA MODIFICAÇÃO ---
+
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') # Lembre de adicionar no docker-compose
+app.config["JWT_SECRET_KEY"] = "123456789"
 app.config['JSON_SORT_KEYS'] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
