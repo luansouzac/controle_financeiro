@@ -1,8 +1,21 @@
-from flask import request, jsonify
+from flask import request, jsonify, current_app, send_from_directory 
 from models.user_model import User
+from models import db 
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from werkzeug.utils import secure_filename 
+from PIL import Image 
+import os             
+import uuid
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 class UserController:
+
+    @staticmethod
+    def allowed_file(filename):
+        return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
 
     @staticmethod
     @jwt_required()
@@ -45,6 +58,75 @@ class UserController:
         user.delete()
         
         return jsonify({"mensagem": "Usuário deletado com sucesso"})
+    
+    @staticmethod 
+    @jwt_required()
+    def upload_my_profile_picture(): 
+        id_usuario_logado = get_jwt_identity()
+        usuario = User.query.get(id_usuario_logado) 
+
+        if not usuario:
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        if 'image' not in request.files:
+            return jsonify({"erro": "Campo 'image' não encontrado no formulário"}), 400
+
+        file = request.files['image']
+
+        if file.filename == '':
+            return jsonify({"erro": "Nenhum arquivo selecionado"}), 400
+
+        if not UserController.allowed_file(file.filename): 
+            return jsonify({"erro": "Tipo de arquivo não permitido"}), 400
+
+        filepath = None
+        try:
+            ext = file.filename.rsplit('.', 1)[1].lower()
+            unique_filename = f"{id_usuario_logado}_{uuid.uuid4().hex}.{ext}"
+            filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_filename)
+
+            img = Image.open(file.stream)
+            img.thumbnail((300, 300))
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+            img.save(filepath, format='JPEG', quality=85) 
+            img.close() 
+
+            old_filename = usuario.image  
+            if old_filename:
+                old_filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], old_filename)
+                if os.path.exists(old_filepath):
+                    try:
+                        os.remove(old_filepath)
+                    except OSError as e:
+                        print(f"Erro ao deletar arquivo antigo {old_filepath}: {e}") 
+
+            usuario.image = unique_filename 
+            db.session.commit()
+
+            return jsonify({"message": "Upload bem-sucedido", "filename": unique_filename}), 200
+
+        except Exception as e:
+            db.session.rollback() 
+            if filepath and os.path.exists(filepath):
+                 try:
+                    os.remove(filepath)
+                 except OSError as e_remove:
+                     print(f"Erro ao remover arquivo parcialmente salvo {filepath}: {e_remove}")
+            print(f"Erro no upload/processamento: {e}") 
+            return jsonify({"erro": f"Falha ao processar a imagem: {str(e)}"}), 500
+            
+    @staticmethod
+    def get_profile_image(filename):
+        try:
+            return send_from_directory(
+                current_app.config['UPLOAD_FOLDER'],
+                filename,
+                as_attachment=False 
+            )
+        except FileNotFoundError:
+            return jsonify({"erro": "Imagem não encontrada"}), 404
+
     
     #caso tenha area de admin a gente usa essas funcoes abaixo
     # @staticmethod

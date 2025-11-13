@@ -91,6 +91,14 @@ def delete_transacao(transacao_id):
 def get_dashboard():
     return TransacaoController.get_dashboard()
 
+@routes_bp.route('/user/profile_image', methods=['POST'])
+def upload_profile_image():
+    return UserController.upload_my_profile_picture()
+
+@routes_bp.route('/user/get_image', methods=['GET'])
+def get_profile_image():
+    return UserController.get_profile_image()
+
 
 
 # @routes_bp.route('/posts', methods=['GET'])
