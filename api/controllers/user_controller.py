@@ -117,15 +117,22 @@ class UserController:
             return jsonify({"erro": f"Falha ao processar a imagem: {str(e)}"}), 500
             
     @staticmethod
-    def get_profile_image(filename):
+    @jwt_required()
+    def get_profile_image():
+        id_usuario_logado = get_jwt_identity()
+        user = User.query.get(id_usuario_logado)
+
+        if not user or not user.image:
+            return jsonify({"erro": "Imagem não encontrada"}), 404
+
         try:
             return send_from_directory(
                 current_app.config['UPLOAD_FOLDER'],
-                filename,
+                user.image, 
                 as_attachment=False 
             )
         except FileNotFoundError:
-            return jsonify({"erro": "Imagem não encontrada"}), 404
+            return jsonify({"erro": "Arquivo físico não encontrado"}), 404
 
     
     #caso tenha area de admin a gente usa essas funcoes abaixo
