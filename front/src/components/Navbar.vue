@@ -47,14 +47,14 @@ const authStore = useAuthStore()
 
 const routeConfig = {
   Home: { icon: 'mdi-home-outline' },
-  Transactions: { icon: 'mdi-swap-horizontal' },
-  Reports: { icon: 'mdi-chart-pie-outline' },
-  Categories: { icon: 'mdi-tag-multiple-outline' },
-  Wallets: { icon: 'mdi-wallet-outline' },
-  Incomes: { icon: 'mdi-arrow-up-bold-circle-outline' },
-  Expenses: { icon: 'mdi-arrow-down-bold-circle-outline' },
-  Settings: { icon: 'mdi-cog-outline' },
-  About: { icon: 'mdi-information-outline' },
+  Transações: { icon: 'mdi-swap-horizontal' },
+  Relatórios: { icon: 'mdi-chart-pie-outline' },
+  Categorias: { icon: 'mdi-tag-multiple-outline' },
+  Carteiras: { icon: 'mdi-wallet-outline' },
+  Receitas: { icon: 'mdi-arrow-up-bold-circle-outline' },
+  Despesas: { icon: 'mdi-arrow-down-bold-circle-outline' },
+  Configurações: { icon: 'mdi-cog-outline' },
+  Sobre: { icon: 'mdi-information-outline' },
 }
 
 const navigationRoutes = computed(() => {

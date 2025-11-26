@@ -28,53 +28,52 @@ const routes = [
   },
   {
     path: '/transactions',
-    name: 'Transactions',
+    name: 'Transações',
     component: TransactionsView,
   },
-  {
-    path: '/reports',
-    name: 'Reports',
-    component: ReportsView,
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: AboutView,
-  },
+  // {
+  //   path: '/reports',
+  //   name: 'Reports',
+  //   component: ReportsView,
+  // },
   {
     path: '/wallets',
-    name: 'Wallets',
+    name: 'Carteiras',
     component: WalletsView,
   },
   {
     path: '/categories',
-    name: 'Categories',
+    name: 'Categorias',
     component: CategoyView,
   },
   {
     path: '/incomes',
-    name: 'Incomes',
+    name: 'Receitas',
     component: IncomeView,
     props: (route: any) => ({
       tipo: 'receita',
-      key: 'incomes'
+      key: 'incomes',
     }),
   },
   {
     path: '/expenses',
-    name: 'Expenses',
+    name: 'Despesas',
     component: IncomeView,
     props: (route: any) => ({
       tipo: 'despesa',
-      key: 'expenses'
+      key: 'expenses',
     }),
   },
   {
+    path: '/about',
+    name: 'Sobre',
+    component: AboutView,
+  },
+  {
     path: '/settings',
-    name: 'Settings',
+    name: 'Configurações',
     component: SettingsView,
   },
-
 ]
 
 const router = createRouter({
@@ -83,18 +82,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Register'];
-  
-  const authRequired = !publicPages.includes(to.name as string);
-  
-  const token = sessionStorage.getItem('authToken');
+  const publicPages = ['Login', 'Register']
+
+  const authRequired = !publicPages.includes(to.name as string)
+
+  const token = sessionStorage.getItem('authToken')
 
   if (authRequired && !token) {
-    return next({ name: 'Login' });
+    return next({ name: 'Login' })
   }
 
-  next();
-});
+  next()
+})
 
 export default router
 export { routes }
