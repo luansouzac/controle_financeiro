@@ -8,7 +8,9 @@ class CategoriaTransacao(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(255), nullable=True)
     criado_em = db.Column(db.DateTime, server_default=func.now())
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
+    usuario = db.relationship('User', back_populates='categorias_transacoes')
     transacoes = db.relationship('Transacao', back_populates='categoria', cascade="all, delete-orphan")
 
     #metodos de classe usam o classmethodo (cls)

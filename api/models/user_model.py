@@ -14,6 +14,7 @@ class User(db.Model):
     image = db.Column(db.String(255), nullable=True, default=None)
 
     carteiras = db.relationship('Carteira', back_populates='usuario', cascade="all, delete-orphan")
+    categorias_transacoes = db.relationship('CategoriaTransacao', back_populates='usuario', cascade="all, delete-orphan")
     def to_dict(self):
         return {
             "id": self.id,
