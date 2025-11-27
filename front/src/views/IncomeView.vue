@@ -230,9 +230,39 @@ const previousMonthIncome = computed(() => {
     .reduce((total, income) => total + income.valor, 0)
 })
 
-const incomeProgression = ref({
-  labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
-  data: [7200, 7350, 7800, 7500, 8100, 8050],
+const incomeProgression = computed(() => {
+  const labels: string[] = []
+  const data: number[] = []
+  const today = new Date()
+  const totalsMap: Record<string, number> = {}
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1)
+    const key = `${d.getMonth()}-${d.getFullYear()}`
+    totalsMap[key] = 0
+    const monthName = d.toLocaleDateString('pt-BR', { month: 'short' })
+    labels.push(monthName.charAt(0).toUpperCase() + monthName.slice(1))
+  }
+
+  incomesStore.incomesData.forEach((t) => {
+    const tDate = new Date(t.criado_em)
+    const key = `${tDate.getMonth()}-${tDate.getFullYear()}`
+
+    if (totalsMap[key] !== undefined) {
+      totalsMap[key] += t.valor
+    }
+  })
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1)
+    const key = `${d.getMonth()}-${d.getFullYear()}`
+    data.push(totalsMap[key])
+  }
+
+  return {
+    labels,
+    data,
+  }
 })
 
 const incomeByCategory = computed(() => {
